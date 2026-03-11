@@ -137,7 +137,8 @@
     </div>
 
     <!-- Botón de salir AR -->
-    <button id="exit-btn" onclick="cerrarAR()">Salir AR</button>
+    <button id="exit-btn" onclick="location.href = 'index.html'">Salir AR</button>
+    
 
     <!-- Escena AR -->
     <a-scene
@@ -273,13 +274,6 @@
         }
       }
 
-      // Función para salir de AR
-      function cerrarAR() {
-        document.querySelector("a-scene").style.display = "none";
-        infoCard.style.display = "none";
-        scanGuide.style.display = "flex";
-        activeIndex = null;
-      }
 
       // Ajustar cámara en mobile para evitar pantalla blanca
       window.addEventListener("load", () => {
