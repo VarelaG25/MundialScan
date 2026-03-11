@@ -19,6 +19,20 @@
         width: 100%;
         height: 100%;
       }
+
+      a-scene {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      a-scene canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
       #info-card {
         position: fixed;
         bottom: 20px;
@@ -70,7 +84,7 @@
         top: 1rem;
         right: 1rem;
         z-index: 1001;
-        background: rgba(255,255,255,0.8);
+        background: rgba(255, 255, 255, 0.8);
         padding: 0.5rem 1rem;
         border-radius: 12px;
         font-weight: bold;
@@ -128,18 +142,58 @@
     <!-- Escena AR -->
     <a-scene
       embedded
-      arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono;"
-      style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;"
+      arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: color_and_matrix;"
+      style="position: fixed; top: 0; left: 0; width: 100%; height: 100%"
     >
       <!-- Marcadores -->
-      <a-marker type="pattern" url="./markers/pattern-br.patt" data-idx="0" data-name="pattern-br"></a-marker>
-      <a-marker type="pattern" url="./markers/pattern-ec.patt" data-idx="1" data-name="pattern-ec"></a-marker>
-      <a-marker type="pattern" url="./markers/pattern-can.patt" data-idx="2" data-name="pattern-can"></a-marker>
-      <a-marker type="pattern" url="./markers/pattern-col.patt" data-idx="3" data-name="pattern-col"></a-marker>
-      <a-marker type="pattern" url="./markers/pattern-ar.patt" data-idx="4" data-name="pattern-ar"></a-marker>
-      <a-marker type="pattern" url="./markers/pattern-eu.patt" data-idx="5" data-name="pattern-eu"></a-marker>
-      <a-marker type="pattern" url="./markers/pattern-ur.patt" data-idx="6" data-name="pattern-ur"></a-marker>
-      <a-marker type="pattern" url="./markers/pattern-mx.patt" data-idx="7" data-name="pattern-mx"></a-marker>
+      <a-marker
+        type="pattern"
+        url="./markers/pattern-br.patt"
+        data-idx="0"
+        data-name="pattern-br"
+      ></a-marker>
+      <a-marker
+        type="pattern"
+        url="./markers/pattern-ec.patt"
+        data-idx="1"
+        data-name="pattern-ec"
+      ></a-marker>
+      <a-marker
+        type="pattern"
+        url="./markers/pattern-can.patt"
+        data-idx="2"
+        data-name="pattern-can"
+      ></a-marker>
+      <a-marker
+        type="pattern"
+        url="./markers/pattern-col.patt"
+        data-idx="3"
+        data-name="pattern-col"
+      ></a-marker>
+      <a-marker
+        type="pattern"
+        url="./markers/pattern-ar.patt"
+        data-idx="4"
+        data-name="pattern-ar"
+      ></a-marker>
+      <a-marker
+        type="pattern"
+        url="./markers/pattern-eu.patt"
+        data-idx="5"
+        data-name="pattern-eu"
+      ></a-marker>
+      <a-marker
+        type="pattern"
+        url="./markers/pattern-ur.patt"
+        data-idx="6"
+        data-name="pattern-ur"
+      ></a-marker>
+      <a-marker
+        type="pattern"
+        url="./markers/pattern-mx.patt"
+        data-idx="7"
+        data-name="pattern-mx"
+      ></a-marker>
       <a-entity camera look-controls="enabled: false"></a-entity>
     </a-scene>
 
@@ -199,13 +253,17 @@
             btn.className = "option-btn";
             btn.innerText = opt;
             btn.onclick = () => {
-              list.querySelectorAll(".option-btn").forEach((b) => (b.disabled = true));
+              list
+                .querySelectorAll(".option-btn")
+                .forEach((b) => (b.disabled = true));
               if (i === quiz.c) {
                 btn.classList.add("correct");
                 feedback.innerText = "✅ ¡Correcto!";
               } else {
                 btn.classList.add("incorrect");
-                list.querySelectorAll(".option-btn")[quiz.c].classList.add("correct");
+                list
+                  .querySelectorAll(".option-btn")
+                  [quiz.c].classList.add("correct");
                 feedback.innerText = "❌ Incorrecto";
               }
               feedback.classList.remove("hidden");
@@ -225,7 +283,8 @@
 
       // Ajustar cámara en mobile para evitar pantalla blanca
       window.addEventListener("load", () => {
-        const arSource = document.querySelector("a-scene").systems["arjs"]?.arSource;
+        const arSource =
+          document.querySelector("a-scene").systems["arjs"]?.arSource;
         if (arSource?.domElement) {
           arSource.domElement.style.width = "100%";
           arSource.domElement.style.height = "100%";

@@ -13,7 +13,7 @@ export const teamData = [
   },
   {
     name: "Canadá",
-    code: "ca",
+    code: "can",
     desc: "Uno de los anfitriones del Mundial 2026.",
     quiz: [{ q: "¿Qué jugador canadiense juega en el Bayern Múnich?", a: ["Jonathan David", "Alphonso Davies", "Cyle Larin"], c: 1 }],
   },
@@ -31,13 +31,13 @@ export const teamData = [
   },
   {
     name: "Estados Unidos",
-    code: "us",
+    code: "eu",
     desc: "Anfitrión principal del Mundial 2026.",
     quiz: [{ q: "¿En qué año fue sede del mundial Estados Unidos?", a: ["1994", "2002", "1986"], c: 0 }],
   },
   {
     name: "Uruguay",
-    code: "uy",
+    code: "ur",
     desc: "Primer campeón mundial en 1930.",
     quiz: [{ q: "¿Cuántos mundiales ha ganado Uruguay?", a: ["1", "2", "3"], c: 1 }],
   },
