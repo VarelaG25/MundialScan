@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import Cam from './Cam.vue'
 
 // Estado para controlar si la cámara está abierta o no
 // (Asegúrate de que tu componente Cam exponga o maneje este estado)
