@@ -65,10 +65,22 @@
         border: 2px dashed rgba(255, 255, 255, 0.5);
         border-radius: 20px;
       }
+      #exit-btn {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1001;
+        background: rgba(255,255,255,0.8);
+        padding: 0.5rem 1rem;
+        border-radius: 12px;
+        font-weight: bold;
+        cursor: pointer;
+      }
     </style>
   </head>
 
   <body>
+    <!-- Guía de escaneo -->
     <div id="scan-guide">
       <div class="guide-box"></div>
       <p
@@ -78,6 +90,7 @@
       </p>
     </div>
 
+    <!-- Info y quiz -->
     <div id="info-card">
       <div class="flex items-center gap-4 mb-3">
         <img
@@ -109,59 +122,25 @@
       </button>
     </div>
 
+    <!-- Botón de salir AR -->
+    <button id="exit-btn" onclick="cerrarAR()">Salir AR</button>
+
+    <!-- Escena AR -->
     <a-scene
       embedded
       arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono;"
+      style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;"
     >
-      <a-marker
-        type="pattern"
-        url="./markers/pattern-br.patt"
-        data-idx="0"
-        data-name="pattern-br"
-      ></a-marker>
-      <a-marker
-        type="pattern"
-        url="./markers/pattern-ec.patt"
-        data-idx="1"
-        data-name="pattern-ec"
-      ></a-marker>
-      <a-marker
-        type="pattern"
-        url="./markers/pattern-can.patt"
-        data-idx="2"
-        data-name="pattern-can"
-      ></a-marker>
-      <a-marker
-        type="pattern"
-        url="./markers/pattern-col.patt"
-        data-idx="3"
-        data-name="pattern-col"
-      ></a-marker>
-      <a-marker
-        type="pattern"
-        url="./markers/pattern-ar.patt"
-        data-idx="4"
-        data-name="pattern-ar"
-      ></a-marker>
-      <a-marker
-        type="pattern"
-        url="./markers/pattern-eu.patt"
-        data-idx="5"
-        data-name="pattern-eu"
-      ></a-marker>
-      <a-marker
-        type="pattern"
-        url="./markers/pattern-ur.patt"
-        data-idx="6"
-        data-name="pattern-ur"
-      ></a-marker>
-      <a-marker
-        type="pattern"
-        url="./markers/pattern-mx.patt"
-        data-idx="7"
-        data-name="pattern-mx"
-      ></a-marker>
-      <a-entity camera></a-entity>
+      <!-- Marcadores -->
+      <a-marker type="pattern" url="./markers/pattern-br.patt" data-idx="0" data-name="pattern-br"></a-marker>
+      <a-marker type="pattern" url="./markers/pattern-ec.patt" data-idx="1" data-name="pattern-ec"></a-marker>
+      <a-marker type="pattern" url="./markers/pattern-can.patt" data-idx="2" data-name="pattern-can"></a-marker>
+      <a-marker type="pattern" url="./markers/pattern-col.patt" data-idx="3" data-name="pattern-col"></a-marker>
+      <a-marker type="pattern" url="./markers/pattern-ar.patt" data-idx="4" data-name="pattern-ar"></a-marker>
+      <a-marker type="pattern" url="./markers/pattern-eu.patt" data-idx="5" data-name="pattern-eu"></a-marker>
+      <a-marker type="pattern" url="./markers/pattern-ur.patt" data-idx="6" data-name="pattern-ur"></a-marker>
+      <a-marker type="pattern" url="./markers/pattern-mx.patt" data-idx="7" data-name="pattern-mx"></a-marker>
+      <a-entity camera look-controls="enabled: false"></a-entity>
     </a-scene>
 
     <script type="module">
@@ -169,18 +148,16 @@
 
       const infoCard = document.getElementById("info-card");
       const scanGuide = document.getElementById("scan-guide");
+      const exitBtn = document.getElementById("exit-btn");
       let activeIndex = null;
 
-      // Verificar carga de datos
+      // Mostrar los datos cargados
       console.log("Datos cargados de teams.js:", teamData);
 
       document.querySelectorAll("a-marker").forEach((marker) => {
-        // EVENTO DE ESCANEO REAL
         marker.addEventListener("markerFound", () => {
           const id = parseInt(marker.getAttribute("data-idx"));
           const imgName = marker.getAttribute("data-name");
-
-          console.log("¡SISTEMA: Marcador detectado visualmente! ID:", id);
 
           if (activeIndex === id) return;
           activeIndex = id;
@@ -194,7 +171,7 @@
         });
 
         marker.addEventListener("markerLost", () => {
-          console.log("SISTEMA: Marcador fuera de vista");
+          console.log("Marcador fuera de vista");
         });
       });
 
@@ -202,11 +179,8 @@
         document.getElementById("team-name").innerText = team.name;
         document.getElementById("team-desc").innerText = team.desc;
 
-        // Carga la imagen local desde tu carpeta flags/
         const flagImg = document.getElementById("team-flag");
         flagImg.src = `flags/${imgName}.png`;
-
-        // Manejo de error si la imagen no existe
         flagImg.onerror = () => {
           console.error(`No se encontró la imagen: flags/${imgName}.png`);
           flagImg.src = "https://via.placeholder.com/80x50?text=Error";
@@ -225,15 +199,13 @@
             btn.className = "option-btn";
             btn.innerText = opt;
             btn.onclick = () => {
-              const buttons = list.querySelectorAll(".option-btn");
-              buttons.forEach((b) => (b.disabled = true));
-
+              list.querySelectorAll(".option-btn").forEach((b) => (b.disabled = true));
               if (i === quiz.c) {
                 btn.classList.add("correct");
                 feedback.innerText = "✅ ¡Correcto!";
               } else {
                 btn.classList.add("incorrect");
-                buttons[quiz.c].classList.add("correct");
+                list.querySelectorAll(".option-btn")[quiz.c].classList.add("correct");
                 feedback.innerText = "❌ Incorrecto";
               }
               feedback.classList.remove("hidden");
@@ -242,6 +214,24 @@
           });
         }
       }
+
+      // Función para salir de AR
+      function cerrarAR() {
+        document.querySelector("a-scene").style.display = "none";
+        infoCard.style.display = "none";
+        scanGuide.style.display = "flex";
+        activeIndex = null;
+      }
+
+      // Ajustar cámara en mobile para evitar pantalla blanca
+      window.addEventListener("load", () => {
+        const arSource = document.querySelector("a-scene").systems["arjs"]?.arSource;
+        if (arSource?.domElement) {
+          arSource.domElement.style.width = "100%";
+          arSource.domElement.style.height = "100%";
+          arSource.domElement.style.objectFit = "cover";
+        }
+      });
     </script>
   </body>
 </html>
