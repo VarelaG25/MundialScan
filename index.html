@@ -1,19 +1,120 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <title>MundialScan AR</title>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image.prod.js"></script>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image-aframe.prod.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.5/dist/mindar-image-three.prod.js"></script>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mundial 2026 - Equipos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #f8fafc; font-family: 'Inter', sans-serif; padding-bottom: 80px; }
+        .team-card { 
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .team-card:active { transform: scale(0.95); }
+        .nav-bottom {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: white; height: 70px;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 50;
+        }
+        .cam-btn {
+            background: #10b981; color: white;
+            width: 60px; height: 60px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; border: 4px solid white;
+            transform: translateY(-20px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+        .modal { 
+            display: none; position: fixed; inset: 0; 
+            background: rgba(0,0,0,0.5); z-index: 100;
+            align-items: flex-end;
+        }
+        .modal-content {
+            background: white; width: 100%;
+            border-radius: 24px 24px 0 0;
+            padding: 24px; transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+        }
+        .modal.active { display: flex; }
+        .modal.active .modal-content { transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <header class="p-6">
+        <h1 class="text-3xl font-bold text-slate-800">Mundial 2026</h1>
+        <p class="text-slate-500">Selecciones clasificadas y listas para la gloria.</p>
+    </header>
+
+    <main class="px-6 grid grid-cols-2 gap-4">
+        </main>
+
+    <div id="infoModal" class="modal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-4"></div>
+            <div id="modalBody">
+                </div>
+            <button onclick="closeModal()" class="w-full mt-6 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold">Cerrar</button>
+        </div>
+    </div>
+
+    <nav class="nav-bottom">
+        <a href="arcamera.html" class="cam-btn">
+            <i class="fa-solid fa-camera"></i>
+        </a>
+    </nav>
+
+    <script>
+        const teams = [
+            { name: "México", code: "mx", desc: "Anfitrión por tercera vez. El Estadio Azteca espera hacer historia.", color: "bg-green-700" },
+            { name: "Argentina", code: "ar", desc: "El campeón defensor busca repetir la hazaña de Qatar con una nueva generación.", color: "bg-sky-400" },
+            { name: "EU", code: "us", desc: "Estados Unidos busca dar el golpe definitivo en casa con sus estrellas europeas.", color: "bg-blue-800" },
+            { name: "Colombia", code: "co", desc: "Regresan al mundial con un fútbol alegre y una defensa sólida.", color: "bg-yellow-400" },
+            { name: "Canadá", code: "ca", desc: "La hoja de maple quiere demostrar que ya es una potencia en la CONCACAF.", color: "bg-red-600" },
+            { name: "Ecuador", code: "ec", desc: "Juventud y potencia física. 'La Tri' es el rival que nadie quiere enfrentar.", color: "bg-yellow-500" },
+            { name: "Brasil", code: "br", desc: "El pentacampeón siempre es favorito. Jogo Bonito garantizado.", color: "bg-green-500" },
+            { name: "Uruguay", code: "uy", desc: "La garra charrúa liderada por un sistema ofensivo renovado.", color: "bg-sky-600" }
+        ];
+
+        const container = document.querySelector('main');
+
+        // Generar cards
+        teams.forEach(team => {
+            const card = document.createElement('div');
+            card.className = `team-card bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center`;
+            card.onclick = () => showInfo(team);
+            card.innerHTML = `
+                <img src="https://flagcdn.com/w160/${team.code}.png" class="w-20 h-14 object-cover rounded shadow-sm mb-3" alt="${team.name}">
+                <span class="font-bold text-slate-700">${team.name}</span>
+            `;
+            container.appendChild(card);
+        });
+
+        function showInfo(team) {
+            const modal = document.getElementById('infoModal');
+            const body = document.getElementById('modalBody');
+            body.innerHTML = `
+                <div class="flex items-center gap-4 mb-4">
+                    <img src="https://flagcdn.com/w160/${team.code}.png" class="w-16 h-10 object-cover rounded shadow-sm" alt="${team.name}">
+                    <h2 class="text-2xl font-bold text-slate-800">${team.name}</h2>
+                </div>
+                <p class="text-slate-600 leading-relaxed">${team.desc}</p>
+                <div class="mt-4 p-4 bg-slate-50 rounded-xl">
+                    <span class="text-xs font-bold uppercase text-slate-400">Estado</span>
+                    <p class="text-green-600 font-semibold">Listo para el Mundial 2026</p>
+                </div>
+            `;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('infoModal').classList.remove('active');
+        }
+    </script>
+</body>
 </html>
