@@ -63,6 +63,9 @@ onMounted(() => {
       device-orientation-permission-ui="enabled: false"
     >
       <a-assets>
+        <a-light type="ambient" intensity="1"></a-light>
+        <a-light type="directional" position="0 10 10" intensity="1"></a-light>
+
         <a-asset-item
           id="modelo-mexico"
           src="./models/mexico.glb"
@@ -76,11 +79,12 @@ onMounted(() => {
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
+        <a-box position="0 0 0" scale="0.5 0.5 0.5" material="color: red;"></a-box>
         <a-gltf-model
           src="#modelo-mexico"
           rotation="0 0 0"
           position="0 0 0.1"
-          scale="0.1 0.1 0.1"
+          scale="1 1 1"
         ></a-gltf-model>
       </a-entity>
 
