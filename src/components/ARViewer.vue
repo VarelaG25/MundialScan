@@ -55,7 +55,7 @@ onMounted(() => {
     </Transition>
 
     <a-scene
-      mindar-image="imageTargetSrc: targets/targets.mind; autoStart: true; uiScanning: no;"
+      :mindar-image="'imageTargetSrc: ./targets/targets.mind; autoStart: true; uiScanning: no;'"
       embedded
       color-space="sRGB"
       renderer="colorManagement: true, physicallyCorrectLights"
@@ -65,11 +65,11 @@ onMounted(() => {
       <a-assets>
         <a-asset-item
           id="modelo-mexico"
-          src="models/mexico.gltf"
+          src="./models/mexico.glb"
         ></a-asset-item>
         <a-asset-item
           id="modelo-argentina"
-          src="models/argentina.gltf"
+          src="./models/messi.glb"
         ></a-asset-item>
       </a-assets>
 
@@ -80,7 +80,7 @@ onMounted(() => {
           src="#modelo-mexico"
           rotation="0 0 0"
           position="0 0 0.1"
-          scale="0.05 0.05 0.05"
+          scale="0.1 0.1 0.1"
         ></a-gltf-model>
       </a-entity>
 
@@ -89,7 +89,7 @@ onMounted(() => {
           src="#modelo-argentina"
           rotation="0 0 0"
           position="0 0 0.1"
-          scale="0.05 0.05 0.05"
+          scale="0.1 0.1 0.1"
         ></a-gltf-model>
       </a-entity>
     </a-scene>
